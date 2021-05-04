@@ -1,8 +1,9 @@
-﻿using System;
-
-public class Publication
+﻿namespace KIT206_GroupWork.Researcher
 {
-	public Publication()
+	public class Publication
 	{
+		public Publication()
+		{
+		}
 	}
 }

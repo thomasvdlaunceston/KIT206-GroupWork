@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assignment_2_Console_application_
+namespace KIT206_GroupWork.Researcher
 {
     class Student
     {
