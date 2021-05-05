@@ -1,8 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class Publication
+namespace KIT206_GroupWork.Researcher
 {
-	public Publication()
+	public class Publication
 	{
+		string DOI;
+		string Title;
+		string Authors;
+		DateTime Year;
+		OutputType Type;
+		string CiteAs;
+		DateTime Available;
+		
+		public Publication()
+		{
+
+		}
 	}
 }
