@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace KIT206_GroupWork.Researcher
 {
-    class Student
+    class Student:Researcher
     {
-        string Degree;
-        string supervisior;
+        string Degree { get; set; }
+        //string supervisior;
     }
 }

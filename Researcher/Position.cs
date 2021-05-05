@@ -8,13 +8,13 @@ namespace KIT206_GroupWork.Researcher
 {
 	public class Position
 	{
-		EmploymentLevel level;
-		DateTime start;
-		DateTime end;
-		Dictionary<EmploymentLevel, string> convertTitle = new Dictionary<EmploymentLevel, string>();
+		public EmploymentLevel level { get; set; }
+		public DateTime start { get; set; }
+		DateTime end { get; set; }
+		private Dictionary<EmploymentLevel, string> convertTitle = new Dictionary<EmploymentLevel, string>();
 
 		public Position()
-		{
+        {
 			convertTitle[EmploymentLevel.Student] = "Student";
 			convertTitle[EmploymentLevel.A] = "Postdoc";
 			convertTitle[EmploymentLevel.B] = "Lecturer";
