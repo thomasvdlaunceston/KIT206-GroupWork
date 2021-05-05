@@ -36,9 +36,9 @@ namespace KIT206_GroupWork.Control
             selected.ToList().ForEach(displayList.Add);
         }
         public void FilterByName(string name) {
-            var filtered = from Researcher.Researcher x in mainList
-                           where x.GivenName == name
-                           select x;
+            var filtered = from Researcher.Researcher res in mainList
+                           where res.GivenName == name
+                           select res;
             displayList.Clear();
             filtered.ToList().ForEach(displayList.Add);
         }
