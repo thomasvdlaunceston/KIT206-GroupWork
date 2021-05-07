@@ -17,8 +17,8 @@ namespace KIT206_GroupWork.Researcher
         public string Campus { get; set; }
         public string Email { get; set; }
 
-        public List<Position> positions;
-        public List<Publication> publications;
+        public List<Position> positions { get; set; }
+        public List<Publication> publications { get; set; }
 
         public Researcher()
         {

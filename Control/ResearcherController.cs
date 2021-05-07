@@ -17,16 +17,18 @@ namespace KIT206_GroupWork.Control
 
         public ResearcherController()
         {
-            mainList = new List<Researcher.Researcher>(LoadReseachers());
-            displayList = new ObservableCollection<Researcher.Researcher>(mainList);
+            
+            
 
         }
 
-        public Researcher.Researcher[] LoadReseachers() {
-            return Adapters.ERDAdapter.fetchBasicResearcherDetails();
+        public void LoadReseachers() {
+            mainList = new List<Researcher.Researcher>(Adapters.ERDAdapter.fetchBasicResearcherDetails());
+            displayList = new ObservableCollection<Researcher.Researcher>(mainList);
             /*string text = ("test");
             Console.WriteLine(text);*/
         }
+
         public void FilterBy(Researcher.EmploymentLevel level) 
         {
             var selected = from Researcher.Researcher res in mainList
@@ -64,9 +66,30 @@ namespace KIT206_GroupWork.Control
             }
 
         }
-        public void LoadResearcherDetails(int id)
+
+        public void reset() 
+        {
+            displayList.Clear();
+            mainList.ForEach(displayList.Add);
+        }
+
+        public ObservableCollection<Researcher.Researcher> GetViewableList()
+        {
+            return displayList;
+        }
+
+        public List<String> basicConsoleDisplay()
+        {
+            List<String> display = new List<string>();
+            foreach (Researcher.Researcher res in displayList.ToList())
+            {
+                display.Add(String.Format("{0}, {1} ({2})", res.FamilyName, res.GivenName, res.Title));
+            }
+            return display;
+        }
+        /*public void LoadResearcherDetails(int id)
         {
             researcher = Adapters.ERDAdapter.fetchFullResearcherDetails(id);
-        }
+        }*/
     }
 }
