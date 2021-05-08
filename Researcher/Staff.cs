@@ -9,7 +9,7 @@ namespace KIT206_GroupWork.Researcher
 	class Staff: Researcher
 	{
 		private Dictionary<EmploymentLevel, double> expectedPub = new Dictionary<EmploymentLevel, double>();
-		private List<Student> student;
+		public List<Student> student;
 
 		public Staff()
 		{

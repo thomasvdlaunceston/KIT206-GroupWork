@@ -10,7 +10,8 @@ namespace KIT206_GroupWork.Researcher
 	{
 		public EmploymentLevel level { get; set; }
 		public DateTime start { get; set; }
-		DateTime end { get; set; }
+		public DateTime end { get; set; }
+
 		private Dictionary<EmploymentLevel, string> convertTitle = new Dictionary<EmploymentLevel, string>();
 
 		public Position()

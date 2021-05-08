@@ -16,14 +16,16 @@ namespace KIT206_GroupWork.Researcher
         public string School { get; set; }
         public string Campus { get; set; }
         public string Email { get; set; }
+        public string Photo { get; set; }
+        
 
         public List<Position> positions { get; set; }
         public List<Publication> publications { get; set; }
 
         public Researcher()
         {
-            publications = new List<Publication>();
-            positions = new List<Position>();
+            //publications = new List<Publication>();
+            //positions = new List<Position>();
         }
 
         public Position GetCurrentJob() 

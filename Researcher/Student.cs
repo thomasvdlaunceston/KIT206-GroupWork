@@ -8,7 +8,7 @@ namespace KIT206_GroupWork.Researcher
 {
     class Student:Researcher
     {
-        string Degree { get; set; }
+        public string Degree { get; set; }
         //string supervisior;
     }
 }

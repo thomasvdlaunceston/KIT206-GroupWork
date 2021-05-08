@@ -38,6 +38,7 @@ namespace KIT206_GroupWork.Control
             selected.ToList().ForEach(displayList.Add);
         }
         public void FilterByName(string name) {
+            //Only Filters BY FIRST NAME
             var filtered = from Researcher.Researcher res in mainList
                            where res.GivenName == name
                            select res;
@@ -83,13 +84,13 @@ namespace KIT206_GroupWork.Control
             List<String> display = new List<string>();
             foreach (Researcher.Researcher res in displayList.ToList())
             {
-                display.Add(String.Format("{0}, {1} ({2})", res.FamilyName, res.GivenName, res.Title));
+                display.Add(String.Format("ID: {3}   {0}, {1} ({2})", res.FamilyName, res.GivenName, res.Title, res.ID));
             }
             return display;
         }
-        /*public void LoadResearcherDetails(int id)
+        public void LoadResearcherDetails(int id)
         {
             researcher = Adapters.ERDAdapter.fetchFullResearcherDetails(id);
-        }*/
+        }
     }
 }
