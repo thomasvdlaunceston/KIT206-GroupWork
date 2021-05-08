@@ -12,7 +12,9 @@ namespace KIT206_GroupWork.Control
     {
         List<Researcher.Researcher> mainList;
         ObservableCollection<Researcher.Researcher> displayList;
-        Researcher.Researcher researcher;
+        Researcher.Student student;
+        Researcher.Staff staff;
+        bool isStaff;
 
 
         public ResearcherController()
@@ -90,7 +92,69 @@ namespace KIT206_GroupWork.Control
         }
         public void LoadResearcherDetails(int id)
         {
-            researcher = Adapters.ERDAdapter.fetchFullResearcherDetails(id);
+            var filtered = from Researcher.Researcher res in mainList
+                           where res.ID == id
+                           select res;
+            if (filtered.ToList().LastOrDefault().GetCurrentJob().level == Researcher.EmploymentLevel.Student)
+            {
+                student = (Researcher.Student)Adapters.ERDAdapter.fetchFullResearcherDetails(id);
+                isStaff = false;
+            }
+            else
+            {
+                staff = (Researcher.Staff)Adapters.ERDAdapter.fetchFullResearcherDetails(id);
+                isStaff = true;
+            }         
         }
+
+        public List<String> researcherConsoleDisplay()
+        {
+            List<String> display = new List<string>();
+            if (isStaff)
+            {
+                display.Add(String.Format("Name: {0} {1}", staff.GivenName, staff.FamilyName));
+                display.Add(String.Format("Title: {0}", staff.Title));
+                display.Add(String.Format("Unit: {0}", staff.School));
+                display.Add(String.Format("Campus: {0}", staff.Campus));
+                display.Add(String.Format("Email: {0}", staff.Email));
+                display.Add(String.Format("Current Job: {0}", staff.CurrentJobTitle()));
+                display.Add(String.Format("Commenced with Institution: {0}", staff.EarliestJob()));
+                display.Add(String.Format("Commenced Current Position: {0}", staff.CurrentJobStart()));
+                display.Add("Previous positions:");
+                foreach (Researcher.Position pos in staff.positions)
+                {
+                    display.Add(String.Format("{0}    {1}    {2}", pos.start, pos.end, pos.title()));
+                }
+                display.Add(String.Format("Tenure: {0}", staff.Tenure()));
+                display.Add("Supervisions:");
+                foreach (Researcher.Student stud in staff.student)
+                {
+                    display.Add(String.Format("{0} {1}", stud.GivenName, stud.FamilyName));
+                }
+            }
+            else
+            {
+                display.Add(String.Format("Name: {0} {1}", student.GivenName, student.FamilyName));
+                display.Add(String.Format("Title: {0}", student.Title));
+                display.Add(String.Format("Unit: {0}", student.School));
+                display.Add(String.Format("Campus: {0}", student.Campus));
+                display.Add(String.Format("Email: {0}", student.Email));
+                display.Add(String.Format("Current Job: {0}", student.CurrentJobTitle()));
+                display.Add(String.Format("Commenced with Institution: {0}", student.EarliestJob().start));
+                display.Add(String.Format("Commenced Current Position: {0}", student.CurrentJobStart()));
+                display.Add("Previous positions:");
+                foreach (Researcher.Position pos in student.positions)
+                {
+                    display.Add(String.Format("{0}    {1}    {2}", pos.start, pos.end, pos.title()));
+                }
+                display.Add(String.Format("Tenure: {0}", student.Tenure()));
+                display.Add(String.Format("Degree: {0}", student.Degree));
+            }
+
+
+
+            return display;
+        }
+        
     }
 }

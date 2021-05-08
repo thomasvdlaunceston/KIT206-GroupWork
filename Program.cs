@@ -17,7 +17,7 @@ namespace KIT206_GroupWork
             do
             {
                 R_Controller.basicConsoleDisplay().ForEach(Console.WriteLine);
-                Console.WriteLine("Would you like to a) exit, b) filter by name, c) filter by level, d) reset, e) sort ascending, f) sort descending");
+                Console.WriteLine("Would you like to a) exit, b) filter by name, c) filter by level, d) reset, e) sort ascending, f) sort descending, g) more info");
                 response = Console.ReadLine();
                 //Should have used switch but anyway :-)
                 if (response == "a")
@@ -44,6 +44,16 @@ namespace KIT206_GroupWork
                 else if (response == "f")
                 {
                     R_Controller.sortAlphabetically(false);
+                }
+                else if (response == "g")
+                {
+                    Console.WriteLine("Please enter ID: ");
+                    int id = Int32.Parse(Console.ReadLine());
+                    R_Controller.LoadResearcherDetails(id);
+                    R_Controller.researcherConsoleDisplay().ForEach(Console.WriteLine);
+                    Console.WriteLine("Press enter to return: ");
+                    Console.ReadLine();
+
                 }
             } while (response != "a");
 

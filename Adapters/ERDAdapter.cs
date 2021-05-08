@@ -157,7 +157,10 @@ namespace KIT206_GroupWork.Adapters
                     //Console.WriteLine("{0} {1}", rdr[0], rdr.GetString(1));
                     //https://stackoverflow.com/questions/20547261/database-field-enum-to-c-sharp-list
                     var enumerated = rdr[1] != DBNull.Value ? rdr.GetString(1) : "Student";
-                    Researcher.Position pos = new Researcher.Position { start = rdr.GetDateTime(2), end = rdr.GetDateTime(3), level = ((Researcher.EmploymentLevel)Enum.Parse(typeof(Researcher.EmploymentLevel), enumerated)) };
+                    //NEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEED TO FIX THIS
+                    DateTime start = rdr[2] != DBNull.Value ? rdr.GetDateTime(2): DateTime.Now;
+                    DateTime end = rdr[3] != DBNull.Value ? rdr.GetDateTime(3): DateTime.Now;
+                    Researcher.Position pos = new Researcher.Position { start = start, end = end, level = ((Researcher.EmploymentLevel)Enum.Parse(typeof(Researcher.EmploymentLevel), enumerated)) };
                     positions.Add(pos);
                 }
             }
@@ -205,7 +208,7 @@ namespace KIT206_GroupWork.Adapters
                     //This illustrates how the raw data can be obtained using an indexer [] or a particular data type can be obtained using a GetTYPENAME() method.
                     //Console.WriteLine("{0} {1}", rdr[0], rdr.GetString(1));
 
-                    if (rdr.GetString(2) == "Student")
+                    if (rdr.GetString(1) == "Student")
                     {
                         student = new Researcher.Student { GivenName = rdr.GetString(2), FamilyName = rdr.GetString(3), Title = rdr.GetString(4), School = rdr.GetString(5), Campus = rdr.GetString(6), Email = rdr.GetString(7), Photo = rdr.GetString(8), Degree = rdr.GetString(9) };
                         Researcher.Position studentPos = new Researcher.Position { start = rdr.GetDateTime(12), level = Researcher.EmploymentLevel.Student };
@@ -216,10 +219,12 @@ namespace KIT206_GroupWork.Adapters
                     else 
                     {
                         staff = new Researcher.Staff { GivenName = rdr.GetString(2), FamilyName = rdr.GetString(3), Title = rdr.GetString(4), School = rdr.GetString(5), Campus = rdr.GetString(6), Email = rdr.GetString(7), Photo = rdr.GetString(8) };
+                        conn.Close();
                         positions = fetchPositions(id);
                         staff.positions = new List<Researcher.Position>(positions);
                         foreach (int iid in getStudentID(id))
                         {
+                            //Console.WriteLine(iid);
                             supervisions.Add((Researcher.Student)fetchFullResearcherDetails(iid));
                         }
                         staff.student = new List<Researcher.Student>(supervisions);
