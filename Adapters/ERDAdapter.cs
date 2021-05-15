@@ -159,7 +159,7 @@ namespace KIT206_GroupWork.Adapters
                     var enumerated = rdr[1] != DBNull.Value ? rdr.GetString(1) : "Student";
                     //NEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEED TO FIX THIS
                     DateTime start = rdr[2] != DBNull.Value ? rdr.GetDateTime(2): DateTime.Now;
-                    DateTime end = rdr[3] != DBNull.Value ? rdr.GetDateTime(3): DateTime.Now;
+                    DateTime end = rdr[3] != DBNull.Value ? rdr.GetDateTime(3): start;
                     Researcher.Position pos = new Researcher.Position { start = start, end = end, level = ((Researcher.EmploymentLevel)Enum.Parse(typeof(Researcher.EmploymentLevel), enumerated)) };
                     positions.Add(pos);
                 }

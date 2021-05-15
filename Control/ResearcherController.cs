@@ -39,6 +39,7 @@ namespace KIT206_GroupWork.Control
             displayList.Clear();
             selected.ToList().ForEach(displayList.Add);
         }
+
         public void FilterByName(string name) {
             //Only Filters BY FIRST NAME
             var filtered = from Researcher.Researcher res in mainList
@@ -110,6 +111,7 @@ namespace KIT206_GroupWork.Control
         public List<String> researcherConsoleDisplay()
         {
             List<String> display = new List<string>();
+            String end;
             if (isStaff)
             {
                 display.Add(String.Format("Name: {0} {1}", staff.GivenName, staff.FamilyName));
@@ -123,7 +125,9 @@ namespace KIT206_GroupWork.Control
                 display.Add("Previous positions:");
                 foreach (Researcher.Position pos in staff.positions)
                 {
-                    display.Add(String.Format("{0}    {1}    {2}", pos.start, pos.end, pos.title()));
+                    end = pos.end != pos.start ? "" + pos.end : "present";
+                    display.Add(String.Format("{0}    {1}    {2}", pos.start, end, pos.title()));
+                    //rdr[3] != DBNull.Value ? rdr.GetDateTime(3): start;
                 }
                 display.Add(String.Format("Tenure: {0}", staff.Tenure()));
                 display.Add("Supervisions:");
