@@ -29,7 +29,7 @@ namespace KIT206_GroupWork.Researcher
 			int CurrentYear = DateTime.Now.Year;
 			int totalPublications = publications.Count;
 
-			while ((CurrentYear - publications[totalPublications].Year.Year)<=3)
+			while ((CurrentYear - publications[totalPublications].Year)<=3)
             {
 				numberOfPublications++;
 				totalPublications--;

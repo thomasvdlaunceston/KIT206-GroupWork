@@ -29,12 +29,12 @@ namespace KIT206_GroupWork.Adapters
             return conn;
         }
 
-        public static Researcher.Researcher[] fetchBasicResearcherDetails() 
+        public static Researcher.Researcher[] fetchBasicResearcherDetails()
         {
 
             MySqlDataReader rdr = null;
             List<Researcher.Researcher> researcherList = new List<Researcher.Researcher>();
-            
+
             GetConnection();
 
             try
@@ -53,11 +53,11 @@ namespace KIT206_GroupWork.Adapters
                 {
                     //This illustrates how the raw data can be obtained using an indexer [] or a particular data type can be obtained using a GetTYPENAME() method.
                     //Console.WriteLine("{0} {1}", rdr[0], rdr.GetString(1));
-                    Researcher.Researcher res = new Researcher.Researcher { GivenName = rdr.GetString(1), FamilyName = rdr.GetString(2), ID = rdr.GetInt32(0), Title=rdr.GetString(4)};
+                    Researcher.Researcher res = new Researcher.Researcher { GivenName = rdr.GetString(1), FamilyName = rdr.GetString(2), ID = rdr.GetInt32(0), Title = rdr.GetString(4) };
                     res.positions = new List<Researcher.Position>();
                     //https://stackoverflow.com/questions/20547261/database-field-enum-to-c-sharp-list
                     var enumerated = rdr[3] != DBNull.Value ? rdr.GetString(3) : "Student";
-                    Researcher.Position pos = new Researcher.Position { level = (Researcher.EmploymentLevel) Enum.Parse(typeof(Researcher.EmploymentLevel), enumerated)};
+                    Researcher.Position pos = new Researcher.Position { level = (Researcher.EmploymentLevel)Enum.Parse(typeof(Researcher.EmploymentLevel), enumerated) };
                     res.positions.Add(pos);
                     //Employee e = new Employee { Name = combined, ID = rdr.GetInt32(2) };
                     researcherList.Add(res);
@@ -158,8 +158,8 @@ namespace KIT206_GroupWork.Adapters
                     //https://stackoverflow.com/questions/20547261/database-field-enum-to-c-sharp-list
                     var enumerated = rdr[1] != DBNull.Value ? rdr.GetString(1) : "Student";
                     //NEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEED TO FIX THIS
-                    DateTime start = rdr[2] != DBNull.Value ? rdr.GetDateTime(2): DateTime.Now;
-                    DateTime end = rdr[3] != DBNull.Value ? rdr.GetDateTime(3): start;
+                    DateTime start = rdr[2] != DBNull.Value ? rdr.GetDateTime(2) : DateTime.Now;
+                    DateTime end = rdr[3] != DBNull.Value ? rdr.GetDateTime(3) : start;
                     Researcher.Position pos = new Researcher.Position { start = start, end = end, level = ((Researcher.EmploymentLevel)Enum.Parse(typeof(Researcher.EmploymentLevel), enumerated)) };
                     positions.Add(pos);
                 }
@@ -180,7 +180,7 @@ namespace KIT206_GroupWork.Adapters
             }
             return positions;
         }
-        public static Researcher.Researcher fetchFullResearcherDetails(int id) 
+        public static Researcher.Researcher fetchFullResearcherDetails(int id)
         {
 
             MySqlDataReader rdr = null;
@@ -210,15 +210,15 @@ namespace KIT206_GroupWork.Adapters
 
                     if (rdr.GetString(1) == "Student")
                     {
-                        student = new Researcher.Student { GivenName = rdr.GetString(2), FamilyName = rdr.GetString(3), Title = rdr.GetString(4), School = rdr.GetString(5), Campus = rdr.GetString(6), Email = rdr.GetString(7), Photo = rdr.GetString(8), Degree = rdr.GetString(9) };
+                        student = new Researcher.Student { ID = id, GivenName = rdr.GetString(2), FamilyName = rdr.GetString(3), Title = rdr.GetString(4), School = rdr.GetString(5), Campus = rdr.GetString(6), Email = rdr.GetString(7), Photo = rdr.GetString(8), Degree = rdr.GetString(9) };
                         Researcher.Position studentPos = new Researcher.Position { start = rdr.GetDateTime(12), level = Researcher.EmploymentLevel.Student };
                         student.positions = new List<Researcher.Position>();
                         student.positions.Add(studentPos);
                         return student;
                     }
-                    else 
+                    else
                     {
-                        staff = new Researcher.Staff { GivenName = rdr.GetString(2), FamilyName = rdr.GetString(3), Title = rdr.GetString(4), School = rdr.GetString(5), Campus = rdr.GetString(6), Email = rdr.GetString(7), Photo = rdr.GetString(8) };
+                        staff = new Researcher.Staff { ID = id, GivenName = rdr.GetString(2), FamilyName = rdr.GetString(3), Title = rdr.GetString(4), School = rdr.GetString(5), Campus = rdr.GetString(6), Email = rdr.GetString(7), Photo = rdr.GetString(8) };
                         conn.Close();
                         positions = fetchPositions(id);
                         staff.positions = new List<Researcher.Position>(positions);
@@ -249,19 +249,102 @@ namespace KIT206_GroupWork.Adapters
             }
             return new Researcher.Researcher();
         }
+
+        public static Researcher.Publication[] fetchBasicPublicationDetails(Researcher.Researcher r)
+        {
+            int researcherID = r.ID;
+
+            //Fetch Positions
+            MySqlDataReader rdr = null;
+            GetConnection();
+            List<Researcher.Publication> publication = new List<Researcher.Publication>();
+
+            try
+            {
+                // Open the connection
+                conn.Open();
+
+                // 1. Instantiate a new command with a query and connection
+                MySqlCommand cmd = new MySqlCommand("select publication.title, publication.year, publication.DOI from researcher_publication join publication on researcher_publication.doi = publication.doi where researcher_publication.researcher_id = " + researcherID+";", conn);
+
+                // 2. Call Execute reader to get query results
+                rdr = cmd.ExecuteReader();
+
+                // print the CategoryName of each record
+                while (rdr.Read())
+                {
+                    //This illustrates how the raw data can be obtained using an indexer [] or a particular data type can be obtained using a GetTYPENAME() method.
+                    //Console.WriteLine("{0} {1}", rdr[0], rdr.GetString(1));
+                    //https://stackoverflow.com/questions/20547261/database-field-enum-to-c-sharp-list
+                    publication.Add(new Researcher.Publication { Title = rdr.GetString(0), Year = rdr.GetInt32(1), DOI = rdr.GetString(2)});
+                }
+            }
+            finally
+            {
+                // close the reader
+                if (rdr != null)
+                {
+                    rdr.Close();
+                }
+
+                // Close the connection
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return publication.ToArray();
+        }
+
+        public static Researcher.Publication completePublicationDetails(Researcher.Publication p)
+        {
+            string doi = p.DOI;
+            //Fetch Positions
+            MySqlDataReader rdr = null;
+            GetConnection();
+
+            try
+            {
+                // Open the connection
+                conn.Open();
+
+                // 1. Instantiate a new command with a query and connection
+                MySqlCommand cmd = new MySqlCommand("select * from publication where DOI = \"" + doi+"\";", conn);
+
+                // 2. Call Execute reader to get query results
+                rdr = cmd.ExecuteReader();
+
+                // print the CategoryName of each record
+                while (rdr.Read())
+                {
+                    //This illustrates how the raw data can be obtained using an indexer [] or a particular data type can be obtained using a GetTYPENAME() method.
+                    //Console.WriteLine("{0} {1}", rdr[0], rdr.GetString(1));
+                    //https://stackoverflow.com/questions/20547261/database-field-enum-to-c-sharp-list
+                    p.Authors = rdr.GetString(2);
+                    p.Type = (Researcher.OutputType)Enum.Parse(typeof(Researcher.OutputType), rdr.GetString(4));
+                    p.Available = rdr.GetDateTime(6);
+                    p.CiteAs = rdr.GetString(5);
+                    return p;
+                }
+            }
+            finally
+            {
+                // close the reader
+                if (rdr != null)
+                {
+                    rdr.Close();
+                }
+
+                // Close the connection
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return p;
+        } 
     }
-        /*
-        public static Researcher.Researcher completeResearcherDetails(Researcher.Researcher r) { }
-        public static Researcher.Publication[] fetchBasicPublicationDetails(Researcher.Researcher r) { }
-        public static Researcher.Publication  completePublicationDetails(Researcher.Publication p) { }
-        public static int[] fetchPublicationCounts(Date from, Date to) { }*/
-
-
-
-
-
-
-
 }
+/*public static Researcher.Researcher completeResearcherDetails(Researcher.Researcher r) { }*/
+/*public static int[] fetchPublicationCounts(Date from, Date to) { }*/
 
-       

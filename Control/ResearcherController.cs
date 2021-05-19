@@ -12,9 +12,12 @@ namespace KIT206_GroupWork.Control
     {
         List<Researcher.Researcher> mainList;
         ObservableCollection<Researcher.Researcher> displayList;
-        Researcher.Student student;
-        Researcher.Staff staff;
-        bool isStaff;
+        public Researcher.Student student;
+        public Researcher.Staff staff;
+        /*List<Researcher.Publication> mainPubList;
+        ObservableCollection<Researcher.Publication> displayPubList;
+        Researcher.Publication publication;*/
+        public bool isStaff;
 
 
         public ResearcherController()
@@ -120,7 +123,7 @@ namespace KIT206_GroupWork.Control
                 display.Add(String.Format("Campus: {0}", staff.Campus));
                 display.Add(String.Format("Email: {0}", staff.Email));
                 display.Add(String.Format("Current Job: {0}", staff.CurrentJobTitle()));
-                display.Add(String.Format("Commenced with Institution: {0}", staff.EarliestJob()));
+                display.Add(String.Format("Commenced with Institution: {0}", staff.EarliestJob().start));
                 display.Add(String.Format("Commenced Current Position: {0}", staff.CurrentJobStart()));
                 display.Add("Previous positions:");
                 foreach (Researcher.Position pos in staff.positions)
@@ -154,11 +157,66 @@ namespace KIT206_GroupWork.Control
                 display.Add(String.Format("Tenure: {0}", student.Tenure()));
                 display.Add(String.Format("Degree: {0}", student.Degree));
             }
-
-
-
             return display;
         }
-        
+
+
+        /*public void loadPublications()
+        {
+            if(isStaff)
+            {
+
+                P_controller.loadPublications((Researcher.Researcher)staff);
+            }
+            else
+            {
+                P_controller.loadPublications((Researcher.Researcher)student);
+            }
+        }
+
+        public void loadFullPublications(int numberInList)
+        {
+            P_controller.loadFullPublications()
+        }*/
+
+
+
+        /*public List<string> basicPublicationConsole()
+        {
+            List<string> console = new List<string>();
+            foreach (Researcher.Publication pub in displayPubList.ToList())
+            {
+                console.Add(String.Format("{0}, {1}", pub.Year, pub.Title));
+            }
+            return console;
+        }
+
+        public List<String> researcherConsoleDisplay()
+        {
+            List<String> display = new List<string>();
+
+            display.Add(String.Format("DOI: {0}", publication.DOI));
+            display.Add(String.Format("Title: {0}", publication.Title));
+            display.Add(String.Format("Authors: {0}", publication.Authors));
+            display.Add(String.Format("Publication Year: {0}", publication.Authors));
+            display.Add(String.Format("Type: {0}", publication.Type));
+            display.Add(String.Format("Cite As: {0}", publication.CiteAs));
+            display.Add(String.Format("Availability Date: {0}", publication.Available));
+            display.Add(String.Format("Age: {0}", publication.Age()));
+            return display;
+        }
+
+        public void loadPublications(Researcher.Researcher r)
+        {
+            mainPubList = new List<Researcher.Publication>(P_Controller.loadPublicationsFor(r));
+            displayPubList = new ObservableCollection<Researcher.Publication>(mainList);
+        }
+
+        public void loadFullPublications(Researcher.Publication p)
+        {
+            publication = loadPublicationDetails(p);
+        }*/
+
+
     }
 }
