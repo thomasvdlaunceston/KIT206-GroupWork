@@ -138,6 +138,12 @@ namespace KIT206_GroupWork.Control
                 {
                     display.Add(String.Format("{0} {1}", stud.GivenName, stud.FamilyName));
                 }
+                //Cumulative Count
+                display.Add("Cumulative Count");
+                foreach (int[] year in Adapters.ERDAdapter.cumulativeCounts((Researcher.Researcher)staff))
+                {
+                    display.Add(String.Format("{0}, {1} publications",year[0], year[1]));
+                }
             }
             else
             {

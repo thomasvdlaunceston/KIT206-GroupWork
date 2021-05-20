@@ -343,8 +343,75 @@ namespace KIT206_GroupWork.Adapters
             }
             return p;
         } 
+
+
+        public static List<int[]> cumulativeCounts(Researcher.Researcher researcher)
+        {
+            int id = researcher.ID;
+            int currentyear = 0;
+            List<int[]> cumulativeCount = new List<int[]>();
+            MySqlDataReader rdr = null;
+            List<Researcher.Researcher> researcherList = new List<Researcher.Researcher>();
+
+            GetConnection();
+
+            try
+            {
+                // Open the connection
+                conn.Open();
+
+                // 1. Instantiate a new command with a query and connection
+                MySqlCommand cmd = new MySqlCommand("select publication.year from researcher_publication join publication on researcher_publication.doi = publication.doi where researcher_publication.researcher_id = "+id+" order by year;", conn);
+
+                // 2. Call Execute reader to get query results
+                rdr = cmd.ExecuteReader();
+
+                // print the CategoryName of each record
+                while (rdr.Read())
+                {
+                    //This illustrates how the raw data can be obtained using an indexer [] or a particular data type can be obtained using a GetTYPENAME() method.
+                    //Console.WriteLine("{0} {1}", rdr[0], rdr.GetString(1));
+                    if (currentyear == 0)
+                    {
+                        currentyear = rdr.GetInt32(0);
+                        cumulativeCount.Add(new int[] { currentyear, 1 });
+                    }
+                    else
+                    {
+                        currentyear = rdr.GetInt32(0);
+                        if (currentyear == cumulativeCount.LastOrDefault()[0])
+                        {
+                            cumulativeCount.LastOrDefault()[1] += 1;
+                        }
+                        else
+                        {
+                            cumulativeCount.Add(new int[] { currentyear, 1 });
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                // close the reader
+                if (rdr != null)
+                {
+                    rdr.Close();
+                }
+
+                // Close the connection
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return cumulativeCount;
+        }
     }
+    /*public static int[] fetchPublicationCounts(DateTime from, DateTime to, Researcher.Researcher research)
+    {
+
+    }*/
 }
 /*public static Researcher.Researcher completeResearcherDetails(Researcher.Researcher r) { }*/
-/*public static int[] fetchPublicationCounts(Date from, Date to) { }*/
+
 
